@@ -1,7 +1,13 @@
-{{cookiecutter.project_name}}
+page-flip-detector
 ==============================
 
-{{cookiecutter.description}}
+Goal(s):
+
+Predict if the page is being flipped using a single image.
+
+Success Metrics:
+
+Evaluate model performance based on F1 score, the higher the better.
 
 Project Organization
 ------------
