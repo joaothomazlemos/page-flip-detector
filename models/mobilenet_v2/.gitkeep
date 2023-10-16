@@ -1,0 +1,3 @@
+// This file is used to keep an empty directory in Git.
+// To create a .gitkeep file, simply create an empty file with this name in the directory you want to keep.
+// This will ensure that the directory is not removed when pushing changes to Git.
