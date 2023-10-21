@@ -1,13 +1,41 @@
 page-flip-detector
 ==============================
 
-Goal(s):
+# Data Description:
+
+We collected page flipping video from smart phones and labelled them as flipping and not flipping.
+
+We clipped the videos as short videos and labelled them as flipping or not flipping. The extracted frames are then saved to disk in a sequential order with the following naming structure: VideoID_FrameNumber
+
+# Goal(s):
 
 Predict if the page is being flipped using a single image.
 
 Success Metrics:
 
 Evaluate model performance based on F1 score, the higher the better.
+
+# Project Development
+
+GitHub Copilot: Sure, here's an example of a README file for this notebook:
+
+# Image Classification with PyTorch
+
+This Jupyter Notebook contains the code for training and evaluating image classification models using PyTorch. 
+
+## Development
+
+The notebook starts by importing the necessary libraries and loading the dataset. The dataset consists of images of pages being flipped or not, which are split into training and validation sets. The notebook then defines and trains two different models: cnn_model and mobilenet_v2. The first is build from scratch using Pytorch nn module. The Mobile Net is a well know mobile and light model, and we apply transferlearning on it.  After training both models on our dataset, we found that cnn_model performed better than mobilenet_v2, achieving an F1 score of 97.5%. This indicates that cnn_model is a good candidate for further testing and deployment.
+
+## Conclusion
+
+In this phase of testing, we trained and evaluated two different models: cnn_model and mobilenet_v2. After training both models on our dataset, we found that cnn_model performed better than mobilenet_v2, achieving an F1 score of 97.5%. This indicates that cnn_model is a good candidate for further testing and deployment. However, it's important to note that this F1 score was achieved on a specific dataset and may not generalize well to other datasets. Therefore, further testing and evaluation is necessary before deploying this model in a production environment.
+
+## Results
+
+The best model was the 'cnn_model' with Train Loss: 0.037 Train Accuracy: 0.99 Validation Loss: 0.021 Validation Accuracy: 0.99. We also made predictions on the test set and computed the F1 score, which was 97.5%.
+![image](https://github.com/joaothomazlemos/page-flip-detector/assets/62029505/49977fca-fccb-4702-b447-39c95149ddc0)
+
 
 Project Organization
 ------------
