@@ -29,7 +29,7 @@ The notebook starts by importing the necessary libraries and loading the dataset
 
 ## Conclusion
 
-In this phase of testing, we trained and evaluated two different models: cnn_model and mobilenet_v2. After training both models on our dataset, we found that cnn_model performed better than mobilenet_v2, achieving an F1 score of 97.5%. This indicates that cnn_model is a good candidate for further testing and deployment. However, it's important to note that this F1 score was achieved on a specific dataset and may not generalize well to other datasets. Therefore, further testing and evaluation is necessary before deploying this model in a production environment.
+In this phase of testing, we trained and evaluated two different models: cnn_model and mobilenet_v2. After training both models on our dataset, we found that cnn_model performed better than mobilenet_v2, achieving an F1 score of 97.5%. This indicates that cnn_model is a good candidate for further testing and deployment. However, it's important to note that this F1 score was achieved on a specific dataset and may not generalize well to other datasets. Therefore, further testing and evaluation are necessary before deploying this model in a production environment.
 
 ## Results
 
