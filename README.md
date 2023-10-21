@@ -3,9 +3,9 @@ page-flip-detector
 
 # Data Description:
 
-We collected page flipping video from smart phones and labelled them as flipping and not flipping.
+We collected page flipping videos from smartphones and labeled them as flipping and not flipping.
 
-We clipped the videos as short videos and labelled them as flipping or not flipping. The extracted frames are then saved to disk in a sequential order with the following naming structure: VideoID_FrameNumber
+We clipped the videos as short videos and labeled them as flipping or not flipping. The extracted frames are then saved to disk in sequential order with the following naming structure: VideoID_FrameNumber
 
 # Goal(s):
 
@@ -34,7 +34,8 @@ In this phase of testing, we trained and evaluated two different models: cnn_mod
 ## Results
 
 The best model was the 'cnn_model' with Train Loss: 0.037 Train Accuracy: 0.99 Validation Loss: 0.021 Validation Accuracy: 0.99. We also made predictions on the test set and computed the F1 score, which was 97.5%.
-![image](C:\Users\joaot\Downloads\output.svg)
+![image](https://github.com/joaothomazlemos/page-flip-detector/assets/62029505/a31c0af8-cc9d-4244-abce-88634f23aab4)
+
 
 
 
