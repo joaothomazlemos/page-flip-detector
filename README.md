@@ -12,7 +12,7 @@ We clipped the videos as short videos and labeled them as flipping or not flippi
 Predict if the page is being flipped using a single image.
 
 Success Metrics:
-![output](https://github.com/joaothomazlemos/page-flip-detector/assets/62029505/3159cadb-0185-4b0d-9443-5a0601199e6d)
+
 
 Evaluate model performance based on F1 score, the higher the better.
 
@@ -33,7 +33,7 @@ In this phase of testing, we trained and evaluated two different models: cnn_mod
 ## Results
 
 The best model was the 'cnn_model' with Train Loss: 0.037 Train Accuracy: 0.99 Validation Loss: 0.021 Validation Accuracy: 0.99. We also made predictions on the test set and computed the F1 score, which was 97.5%.
-
+![output](https://github.com/joaothomazlemos/page-flip-detector/assets/62029505/3159cadb-0185-4b0d-9443-5a0601199e6d)
 
 ![Uploading<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
