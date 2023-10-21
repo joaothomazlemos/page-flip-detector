@@ -13,10 +13,16 @@ Predict if the page is being flipped using a single image.
 
 Success Metrics:
 
-
 Evaluate model performance based on F1 score, the higher the better.
 
 # Project Development
+
+# Highlights
+
+* Created a custom earlystopping class to save the best checkpoints weitghs states.
+* Created custom model with nn class from Pytorch
+* Used transfer learning technique with the light model of mobile Net v2
+* Achieved best results with the custom model over the mobile net
 
 # Image Classification with PyTorch
 
