@@ -25,7 +25,7 @@ This Jupyter Notebook contains the code for training and evaluating image classi
 
 ## Development
 
-The notebook starts by importing the necessary libraries and loading the dataset. The dataset consists of images of pages being flipped or not, which are split into training and validation sets. The notebook then defines and trains two different models: cnn_model and mobilenet_v2. The first is build from scratch using Pytorch nn module. The Mobile Net is a well know mobile and light model, and we apply transferlearning on it.  After training both models on our dataset, we found that cnn_model performed better than mobilenet_v2, achieving an F1 score of 97.5%. This indicates that cnn_model is a good candidate for further testing and deployment.
+The notebook starts by importing the necessary libraries and loading the dataset. The dataset consists of images of pages being flipped or not, which are split into training and validation sets. The notebook then defines and trains two different models: cnn_model and mobilenet_v2. The first is built from scratch using the Pytorch nn module. The Mobile Net is a well-known mobile and light model, and we apply transfer learning to it.  After training both models on our dataset, we found that cnn_model performed better than mobilenet_v2, achieving an F1 score of 97.5%. This indicates that cnn_model is a good candidate for further testing and deployment.
 
 ## Conclusion
 
@@ -34,7 +34,7 @@ In this phase of testing, we trained and evaluated two different models: cnn_mod
 ## Results
 
 The best model was the 'cnn_model' with Train Loss: 0.037 Train Accuracy: 0.99 Validation Loss: 0.021 Validation Accuracy: 0.99. We also made predictions on the test set and computed the F1 score, which was 97.5%.
-![image](https://github.com/joaothomazlemos/page-flip-detector/assets/62029505/d8eae1b8-c164-4978-b1b4-6bb52de351ec)
+![image]("C:\Users\joaot\Downloads\output.svg")
 
 
 
