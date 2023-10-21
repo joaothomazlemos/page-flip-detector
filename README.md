@@ -34,7 +34,7 @@ In this phase of testing, we trained and evaluated two different models: cnn_mod
 ## Results
 
 The best model was the 'cnn_model' with Train Loss: 0.037 Train Accuracy: 0.99 Validation Loss: 0.021 Validation Accuracy: 0.99. We also made predictions on the test set and computed the F1 score, which was 97.5%.
-![image]("C:\Users\joaot\Downloads\output.svg")
+![image](C:\Users\joaot\Downloads\output.svg)
 
 
 
