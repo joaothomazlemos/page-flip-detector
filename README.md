@@ -34,11 +34,19 @@ The notebook starts by importing the necessary libraries and loading the dataset
 
 ## Conclusion
 
-In this phase of testing, we trained and evaluated two different models: cnn_model and mobilenet_v2. After training both models on our dataset, we found that cnn_model performed better than mobilenet_v2, achieving an F1 score of 97.5%. This indicates that cnn_model is a good candidate for further testing and deployment. However, it's important to note that this F1 score was achieved on a specific dataset and may not generalize well to other datasets. Therefore, further testing and evaluation are necessary before deploying this model in a production environment.
 
-## Results
+In this phase of testing, we trained and evaluated three different models: cnn_model, MobileNet, and ResNet. After training all three models on our dataset, we found that cnn_model performed the best, achieving an F1 score of 97.5%. However, MobileNet and ResNet also performed well, achieving F1 scores of 96.6% and 91.8%, respectively. 
 
-The best model was the 'cnn_model' with Train Loss: 0.037 Train Accuracy: 0.99 Validation Loss: 0.021 Validation Accuracy: 0.99. We also made predictions on the test set and computed the F1 score, which was 97.5%.
+These results indicate that all three models are good candidates for further testing and deployment. However, the task wanted the model to be applied on mobile applications, which often means that the model has to be smaller then 40 MB.
+
+* Our custom CNN model got Estimated Total Size (MB): 51.09;
+
+* Although ResNet18 is a popular and well performing model, it is not the best choice for mobile applications. ResNet18 got Estimated Total Size (MB): 81.11;
+
+* MobileNetV2 is our choice: it is a small and efficient model that is well suited for mobile applications. MobileNetV2 got Estimated Total Size (MB): 24.88.
+
+For future work, I intend to tweak on the custom model precision point using quantization techniques to reduze its size and try to fit in mobile applications.
+
 
 ![output](https://github.com/joaothomazlemos/page-flip-detector/assets/62029505/3159cadb-0185-4b0d-9443-5a0601199e6d)
 
