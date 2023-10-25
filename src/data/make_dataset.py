@@ -41,7 +41,7 @@ def test_transform():
 @click.argument('output_filepath', type=click.Path())
 def main(input_filepath, output_filepath):
     """ Runs data processing scripts to turn raw data from (../raw) into
-        cleaned data ready to be analyzed (saved in ../processed).
+        cleaned data ready to be analyzed (saved in ../src/data/processed).
     """
     logger = logging.getLogger(__name__)
     logger.info('making final data set from raw data')
@@ -90,11 +90,11 @@ if __name__ == '__main__':
 #to run the script:
 #python src/data/make_dataset.py
 
-# the input folder is the data folder
+# the input folder is the data folder of the project
 #data
 
-#the folder of this script is src/data, is the folder we save the DS
-#src/data
+#the folder of this script is src/data, and we save on src/data/processed
+#src/data/processed
 
 #we run like:
-#python src/data/make_dataset.py data src/data
+#python src/data/make_dataset.py data src/data/processed
