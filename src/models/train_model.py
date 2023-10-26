@@ -16,7 +16,8 @@ import os
 import pandas as pd
 from skimage import io
 #importing our custom class EarlyStop that is in the utils folder
-from src.utils.EarlyStop import EarlyStopping
+from src.utils.earlystop import EarlyStopping
+
 
 
 
@@ -36,8 +37,32 @@ def test_data_loader(test_dataset):
     Data loader for test data"""
     return torch.utils.data.DataLoader(dataset=test_dataset)
 
-def train_model(model_name, model, criterion, optimizer, trainloader, valloader, epochs=5, patience=7, verbose=True, model_dir=MODEL_DIR):
+def train_model(model_name, model, criterion, optimizer, trainloader, valloader, epochs=5, patience=3, verbose=True):
+    """
+    Training loop for the model. It saves the best model state dict
     
+    _________________________________________________________________
+    Parameters:
+    model_name: name of the model
+    model: model to be trained
+    criterion: loss function
+    optimizer: optimizer
+    trainloader: train data loader
+    valloader: validation data loader
+    epochs: number of epochs
+    patience: number of epochs without improvement before stopping the training
+    verbose: if True, prints the results of each epoch
+    model_dir: directory where the model will be saved
+    _________________________________________________________________
+    Returns:
+    results: dict with the results of the training
+    train_loss: list with the training loss of each epoch
+    train_accuracy: list with the training accuracy of each epoch
+    val_loss: list with the validation loss of each epoch
+    val_accuracy: list with the validation accuracy of each epoch
+    """
+
+
     train_loss, train_accuracy = [], []
     val_loss, val_accuracy = [], []
 
@@ -49,12 +74,12 @@ def train_model(model_name, model, criterion, optimizer, trainloader, valloader,
         else "cpu"
     )
     
-    #checks if the model results folder exists, if not it creates it
-    if not os.path.exists(os.path.join(model_dir, model_name)):
-        os.makedirs(os.path.join(model_dir, model_name))
+    #checks if the model dir folder exists, if not it creates it
+    if not os.path.exists('src/data/models/'+model_name):
+        os.makedirs('src/data/models/'+model_name)
     #initialize the last best weitghts
-    if os.path.exists(os.path.join(model_dir, model_name,'checkpoint.pt')):
-        model.load_state_dict(torch.load(os.path.join(model_dir, model_name, 'checkpoint.pt'), map_location=torch.device(device)))
+    if os.path.exists('src/data/models/'+model_name+'/checkpoint.pt'):
+        model.load_state_dict(torch.load('src/data/models/'+model_name+'/checkpoint.pt'), map_location=torch.device(device))
         print('Loaded checkpoint with the best model.')
     # initialize the early_stopping object
     early_stopping = EarlyStopping(model_name=model_name, patience=patience, verbose=True)
@@ -83,13 +108,13 @@ def train_model(model_name, model, criterion, optimizer, trainloader, valloader,
             ## calculate the loss
             sigmoid = nn.Sigmoid()
             y_hat = sigmoid(y_hat)
-            loss = criterion(y_hat, y.type(torch.float16)) #BCEloss. Check the shapes of the tensors . Precison 16 to reduce memory usage
+            loss = criterion(y_hat, y.type(torch.float32)) #BCEloss. Check the shapes of the tensors . Precison 16 to reduce memory usage
             ## backpropagation
             loss.backward()
             ## update the weights
             optimizer.step()
             train_batch_loss += loss.item()
-            train_batch_acc += (torch.round(y_hat) == y).type(torch.float16).mean().item()
+            train_batch_acc += (torch.round(y_hat) == y).type(torch.float32).mean().item()
         train_loss.append(train_batch_loss / len(trainloader))
         train_accuracy.append(train_batch_acc / len(trainloader))
         
@@ -106,6 +131,8 @@ def train_model(model_name, model, criterion, optimizer, trainloader, valloader,
             # forward pass: compute predicted outputs by passing inputs to the model
             output = model(data).flatten()
             # calculate the loss
+            sigmoid = nn.Sigmoid()
+            output = sigmoid(y_hat)
             loss = criterion(output, target.type(torch.float32))
             val_batch_loss += loss.item()
             val_batch_accuracy += (torch.round(output) == target).type(torch.float32).mean().item()
@@ -141,41 +168,64 @@ def train_model(model_name, model, criterion, optimizer, trainloader, valloader,
                "val_accuracy": val_accuracy}
     
         # load the last checkpoint with the best model
-    model.load_state_dict(torch.load(os.path.join(model_dir, model_name, 'checkpoint.pt')))
+    model = model.load_state_dict(torch.load('src/data/models/'+model_name+'/checkpoint.pt'), map_location=torch.device(device))
+    #save the model dict state
+    torch.save(model.state_dict(), 'src/data/models/'+model_name+'/model.pt')
    
 
     return results, train_loss, train_accuracy, val_loss, val_accuracy
 
 #saving results
-RESULTS_DIR = os.path.join(MODEL_DIR, 'results')
-def save_model_results(train_loss, train_accuracy, val_loss, val_accuracy, model_name:str, results_dir = RESULTS_DIR ):
+def save_model_results(train_loss, train_accuracy, val_loss, val_accuracy, model_name:str):
     #creating a folder inside results dir. The folder name is the model name
     #first check if the folder exists
+    results_dir = 'src/data/results'
     if not os.path.exists(os.path.join(results_dir, model_name)):
         os.makedirs(os.path.join(results_dir, model_name))
     #save the results
-        #save the training loss and accuracy
+    #save the training loss and accuracy
     np.save(os.path.join(results_dir, model_name, 'train_loss.npy'), np.array(train_loss))#
     np.save(os.path.join(results_dir, model_name, 'train_loss.npy'), np.array(train_loss))
     np.save(os.path.join(results_dir, model_name, 'train_accuracy.npy'), np.array(train_accuracy))
-        # save the validation loss and accuracy
+    # save the validation loss and accuracy
     np.save(os.path.join(results_dir, model_name, 'val_loss.npy'), np.array(val_loss))
     np.save(os.path.join(results_dir, model_name, 'val_accuracy.npy'), np.array(val_accuracy))
     print('Results saved!')
+
+#loading the model we want to use here
+def load_model_configs():
+    """
+    Loading the model, the model optimizer and the loss function for that especif model.
+    As we are using transfer learning, we are loading the model from pytorch hub and
+    changing the last layer to fit our problem"""
+
+    #loading the model
+    model = torch.hub.load('pytorch/vision:v0.6.0', 'mobilenet_v2', weights='MobileNet_V2_Weights.DEFAULT')
+
+
+    #freezing the parameters for the  layers
+    for param in model.parameters():
+        param.requires_grad = False
+
+    #changing the last  layer
+    model.classifier[1] = nn.Linear(1280, 1)
+
+    #optimizer
+    optimizer = torch.optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
+    #loss for this model
+    loss_fn = nn.BCELoss() #binary cross entropy loss without logits (sigmoid is applied to the output of the model)
+
+    return model, optimizer, loss_fn
+
 
 
 def main():
 
     torch.manual_seed(42)  # Setting the seed
 
-    # get device
-    device = (
-        "cuda"
-        if torch.cuda.is_available()
-        else "mps"
-        if torch.backends.mps.is_available()
-        else "cpu"
-    )
+    #loading the processed data
+    train_dataset = torch.load('src/data/processed/train_dataset.pt')
+    test_dataset = torch.load('src/data/processed/test_dataset.pt')
 
     if torch.cuda.is_available(): # GPU operations have a separate seed we also want to set
         torch.cuda.manual_seed(42)
@@ -186,21 +236,25 @@ def main():
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
 
-    #MODEL_DIR = os.path.join(project_path, 'models')
+    #loading model and model configs
+    model, optimizer, loss_fn = load_model_configs()
 
-    #optimizer
-    optimizer = torch.optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
-    loss_fn = nn.BCELoss() #binary cross entropy loss
+    
 
-    results, train_loss, train_accuracy, val_loss, val_accuracy = train_model(model.__class__.__name__,
+    _, train_loss, train_accuracy, val_loss, val_accuracy = train_model(model.__class__.__name__,
                                                                                model,
                                                                                  criterion=loss_fn,
                                                                                    optimizer=optimizer,
-                                                                                     trainloader=train_loader()
-                                                                                       valloader=test_loader(),
+                                                                                     trainloader=train_data_loader(train_dataset),
+                                                                                       valloader=test_data_loader(test_dataset),
                                                                                          epochs=20,
                                                                                            patience=3,
                                                                                              verbose=True)
     
+    
+
+    save_model_results(train_loss, train_accuracy, val_loss, val_accuracy, model.__class__.__name__)
 
 
+if __name__ == "__main__":
+    main()
