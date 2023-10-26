@@ -16,7 +16,7 @@ import os
 import pandas as pd
 from skimage import io
 #importing our custom class EarlyStop that is in the utils folder
-from src.utils.earlystop import EarlyStopping
+from src.utilities.earlystop import EarlyStopping
 
 
 
@@ -177,6 +177,22 @@ def train_model(model_name, model, criterion, optimizer, trainloader, valloader,
 
 #saving results
 def save_model_results(train_loss, train_accuracy, val_loss, val_accuracy, model_name:str):
+    """
+    This function saves the results of the model training and validation in the results folder
+    So it can be used later to visuallize how the training was
+
+    _________________________________________________________________
+    Parameters:
+    train_loss: list with the training loss of each epoch
+    train_accuracy: list with the training accuracy of each epoch
+    val_loss: list with the validation loss of each epoch
+    val_accuracy: list with the validation accuracy of each epoch
+    model_name: name of the model
+    _________________________________________________________________
+    Returns:
+    None
+    
+    """
     #creating a folder inside results dir. The folder name is the model name
     #first check if the folder exists
     results_dir = 'src/data/results'
