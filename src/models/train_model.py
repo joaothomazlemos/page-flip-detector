@@ -95,7 +95,7 @@ def train_model(model_name, model, criterion, optimizer, trainloader, valloader,
         os.makedirs('src/data/models/'+model_name)
     #initialize the last best weitghts
     if os.path.exists('src/data/models/'+model_name+'/checkpoint.pt'):
-        model.load_state_dict(torch.load('src/data/models/'+model_name+'/checkpoint.pt'), map_location=torch.device(device))
+        model.load_state_dict(torch.load('src/data/models/'+model_name+'/checkpoint.pt'),   torch.device(device))
         print('Loaded checkpoint with the best model.')
     # initialize the early_stopping object
     early_stopping = EarlyStopping(model_name=model_name, patience=patience, verbose=True)
@@ -179,7 +179,7 @@ def train_model(model_name, model, criterion, optimizer, trainloader, valloader,
                "val_accuracy": val_accuracy}
     
         # load the last checkpoint with the best model
-    model = model.load_state_dict(torch.load('src/data/models/'+model_name+'/checkpoint.pt'), map_location=torch.device(device))
+    model.load_state_dict(torch.load('src/data/models/'+model_name+'/checkpoint.pt'), torch.device(device))
     #save the model dict state
     torch.save(model.state_dict(), 'src/data/models/'+model_name+'/model.pt')
    
@@ -236,7 +236,8 @@ def load_model_configs():
 
     #changing the last  layer
     model.classifier[1] = nn.Linear(1280, 1)
-
+    #adding sigmoid to the output
+    model.classifier.add_module('sigmoid', nn.Sigmoid())
     #optimizer
     optimizer = torch.optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
     #loss for this model
@@ -280,13 +281,17 @@ def main():
                                                                                    optimizer=optimizer,
                                                                                      trainloader=train_data_loader(train_dataset),
                                                                                        valloader=test_data_loader(test_dataset),
-                                                                                         epochs=20,
+                                                                                         epochs=1,
                                                                                            patience=3,
                                                                                              verbose=True)
     
     
 
     save_model_results(train_loss, train_accuracy, val_loss, val_accuracy, model.__class__.__name__)
+
+    #saving the model arvhiteture
+    torch.save(model, 'src/data/models/'+model.__class__.__name__+'/model.pth')
+
 
 
 if __name__ == "__main__":
