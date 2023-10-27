@@ -21,6 +21,7 @@ class EarlyStopping:
             trace_func (function): trace print function.
                             Default: print            
         """
+        self.save_checkpoint_path = 'src/data/models/'+model_name+'/checkpoint.pt'
         self.patience = patience
         self.verbose = verbose
         self.counter = 0
@@ -47,9 +48,9 @@ class EarlyStopping:
             self.save_checkpoint(val_loss, model)
             self.counter = 0
 
-    def save_checkpoint(self, val_loss, model, checkpoint_dir):
+    def save_checkpoint(self, val_loss, model):
         '''Saves model when validation loss decrease.'''
         if self.verbose:
             self.trace_func(f'Validation loss decreased ({self.val_loss_min:.6f} --> {val_loss:.6f}).  Saving model ...')
-        torch.save(model.state_dict(), os.path.join(checkpoint_dir, self.model_name, 'checkpoint.pt'))
+        torch.save(model.state_dict(), self.save_checkpoint_path)
         self.val_loss_min = val_loss

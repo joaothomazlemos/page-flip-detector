@@ -7,7 +7,7 @@ import torch.nn as nn
 from torchvision.utils import make_grid
 from torchvision.utils import save_image
 from torchinfo import summary
-from tqdm.notebook import tqdm  # Progress bar
+from tqdm import tqdm  # Progress bar for py scripts
 from IPython.display import Image
 import matplotlib.pyplot as plt
 import numpy as np
@@ -17,15 +17,21 @@ import pandas as pd
 from skimage import io
 #importing our custom class EarlyStop that is in the utils folder
 from src.utilities.earlystop import EarlyStopping
+from src.data.make_dataset import MakeDataset
+import torch
 
-
-
-
-#creating our dataloader function
 
 def train_data_loader(train_dataset, batch_size=16):
     """
-    Data loader for training data"""
+    Data loader for training data
+    
+    Args:
+    train_dataset: PyTorch dataset object containing the training data
+    batch_size: int, batch size for the data loader
+    
+    Returns:
+    train_loader: PyTorch data loader object for the training data
+    """
     train_loader = torch.utils.data.DataLoader(dataset=train_dataset,
                                            batch_size=batch_size,
                                            shuffle=True,
@@ -34,10 +40,20 @@ def train_data_loader(train_dataset, batch_size=16):
 
 def test_data_loader(test_dataset):
     """
-    Data loader for test data"""
-    return torch.utils.data.DataLoader(dataset=test_dataset)
+    Data loader for test data
+    
+    Args:
+    test_dataset: PyTorch dataset object containing test data
+    
+    Returns:
+    PyTorch DataLoader object for test data
+    """
+    return torch.utils.data.DataLoader(dataset=test_dataset,
+                                        batch_size=16,
+                                        shuffle=False
+                                        )
 
-def train_model(model_name, model, criterion, optimizer, trainloader, valloader, epochs=5, patience=3, verbose=True):
+def train_model(model_name, model, criterion, optimizer, trainloader, valloader, epochs=5, patience=4, verbose=True):
     """
     Training loop for the model. It saves the best model state dict
     
@@ -95,7 +111,7 @@ def train_model(model_name, model, criterion, optimizer, trainloader, valloader,
 
         # Training mode
         model.train()
-        print('Training model on the epoch...')
+        print('Training model on the epoch batches...')
         for X, y in tqdm(trainloader):
             ## move data to device (GPU if available)
             if device != "cpu":
@@ -106,9 +122,7 @@ def train_model(model_name, model, criterion, optimizer, trainloader, valloader,
             ## forward pass
             y_hat = model(X).flatten()
             ## calculate the loss
-            sigmoid = nn.Sigmoid()
-            y_hat = sigmoid(y_hat)
-            loss = criterion(y_hat, y.type(torch.float32)) #BCEloss. Check the shapes of the tensors . Precison 16 to reduce memory usage
+            loss = criterion(y_hat, y.type(torch.float32))
             ## backpropagation
             loss.backward()
             ## update the weights
@@ -130,9 +144,6 @@ def train_model(model_name, model, criterion, optimizer, trainloader, valloader,
             
             # forward pass: compute predicted outputs by passing inputs to the model
             output = model(data).flatten()
-            # calculate the loss
-            sigmoid = nn.Sigmoid()
-            output = sigmoid(y_hat)
             loss = criterion(output, target.type(torch.float32))
             val_batch_loss += loss.item()
             val_batch_accuracy += (torch.round(output) == target).type(torch.float32).mean().item()
@@ -229,7 +240,8 @@ def load_model_configs():
     #optimizer
     optimizer = torch.optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
     #loss for this model
-    loss_fn = nn.BCELoss() #binary cross entropy loss without logits (sigmoid is applied to the output of the model)
+    loss_fn = nn.BCEWithLogitsLoss() #binary cross entropy loss with logits (sigmoid is not applied to the output of the model)
+    #loss_fn = nn.BCELoss() #binary cross entropy loss without logits (sigmoid is applied to the output of the model)
 
     return model, optimizer, loss_fn
 
@@ -240,8 +252,11 @@ def main():
     torch.manual_seed(42)  # Setting the seed
 
     #loading the processed data
-    train_dataset = torch.load('src/data/processed/train_dataset.pt')
-    test_dataset = torch.load('src/data/processed/test_dataset.pt')
+    data_filepath = 'data'
+
+    train_dataset, test_dataset = MakeDataset(data_filepath).process_data()
+    print('Data loaded and processed!')
+
 
     if torch.cuda.is_available(): # GPU operations have a separate seed we also want to set
         torch.cuda.manual_seed(42)
@@ -251,9 +266,11 @@ def main():
     # We want to ensure that all operations are deterministic on GPU (if used) for reproducibility
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
+    print('Device:', torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU')
 
     #loading model and model configs
     model, optimizer, loss_fn = load_model_configs()
+    print('Model loaded!')
 
     
 
