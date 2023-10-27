@@ -44,7 +44,7 @@ def threshold_prediction(prediction):
             prediction = 'Not-Flipping'
         else:
             prediction = 'Flipping'
-            return prediction
+        return prediction
 
 
 
@@ -96,7 +96,7 @@ def main(image_folder, single_image=False, image_name=None):
             img = test_transform(img)
             img = torch.unsqueeze(img, 0)
             #predict
-            prediction = model(input.to(device))
+            prediction = model(img.to(device))
             prediction = threshold_prediction(prediction)
             plt.subplot(2, 2, i+1)
             plt.title('Prediction: {}'.format(prediction))
@@ -109,4 +109,5 @@ def main(image_folder, single_image=False, image_name=None):
 
 if __name__ == '__main__':
     main(image_folder='src/data/examples/', single_image=False, image_name=None)
+    #main(image_folder='src/data/examples/', single_image=True, image_name='0001_000000002.jpg')
 
