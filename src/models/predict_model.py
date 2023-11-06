@@ -82,8 +82,8 @@ def main(image_folder, single_image=False, image_name=None):
         input = test_transform(img)
         input = torch.unsqueeze(input, 0)
         #predict
-        prediction = model(input.to(device))
-        prediction = threshold_prediction(prediction)
+        prediction_prob = model(input.to(device))
+        prediction = threshold_prediction(prediction_prob)
         plt.title('Prediction: {}'.format(prediction))
         plt.imshow(img)
         plt.show()
@@ -137,10 +137,12 @@ def gr_main(img):
     input = test_transform(img)
     input = torch.unsqueeze(input, 0)
     #predict
-    prediction = model(input.to(device))
-    prediction = threshold_prediction(prediction)
+    prediction_prob = model(input.to(device))
+    prediction = threshold_prediction(prediction_prob)
+    #get only the value of the probability value
+    prediction_prob = prediction_prob.item() if prediction == 'Not-Flipping' else 1 - prediction_prob.item()
     print('Prediction: {}'.format(prediction))
-    return 'Prediction: {}'.format(prediction)
+    return '{}'.format(prediction), '{:.2%}'.format(prediction_prob)
 
 
 
@@ -148,7 +150,10 @@ def gr_main(img):
 demo = gr.Interface(
     fn=gr_main,
     inputs=gr.Image(type="pil"),
-    outputs="text",
+    outputs=[
+        gr.Textbox(label="Prediction"),
+        gr.Textbox(label="Probability")
+    ],
     flagging_options=["correct", "incorrect"],
     examples=[
         os.path.join(os.path.abspath(''), "flipping-book-detection/src/models/examples/0001_000000002.jpg"),
