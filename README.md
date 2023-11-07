@@ -1,3 +1,17 @@
+---
+title: flipping-page-detector
+emoji: 📖
+colorFrom: red
+colorTo: blue
+sdk: gradio
+sdk_version: 4.1.1
+app_file: src/models/app.py
+pinned: false
+---
+
+
+
+
 page-flip-detector
 ==============================
 
