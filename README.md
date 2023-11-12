@@ -1,5 +1,5 @@
 
-page-flip-detector
+# page-flip-detector
 
 Application running on the Hugging Face repo
 https://huggingface.co/spaces/John1-1/flipping-detector
