@@ -3,7 +3,7 @@
 
 Application running on the Hugging Face repo so you can try yourself!
 
-https://huggingface.co/spaces/John1-1/flipping-detector
+[https://huggingface.co/spaces/John1-1/flipping-detector](https://huggingface.co/spaces/joaothomazlemos/flipping-detector)
 
 ==============================
 
