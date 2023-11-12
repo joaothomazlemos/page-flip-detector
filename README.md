@@ -1,8 +1,9 @@
 
 page-flip-detector
 
-Aplication running on the Hugging Face repo
+Application running on the Hugging Face repo
 https://huggingface.co/spaces/John1-1/flipping-detector
+
 ==============================
 
 # Data Description:
