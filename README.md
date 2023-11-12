@@ -2,6 +2,7 @@
 # page-flip-detector
 
 Application running on the Hugging Face repo so you can try yourself!
+
 https://huggingface.co/spaces/John1-1/flipping-detector
 
 ==============================
