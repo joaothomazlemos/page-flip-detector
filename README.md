@@ -1,18 +1,8 @@
----
-title: flipping-page-detector
-emoji: 📖
-colorFrom: red
-colorTo: blue
-sdk: gradio
-sdk_version: 4.1.1
-app_file: src/models/app.py
-pinned: false
----
-
-
-
 
 page-flip-detector
+
+Aplication running on the Hugging Face repo
+https://huggingface.co/spaces/John1-1/flipping-detector
 ==============================
 
 # Data Description:
@@ -33,7 +23,7 @@ Evaluate model performance based on F1 score, the higher the better.
 
 # Highlights
 
-* Created a custom earlystopping class to save the best checkpoints weitghs states.
+* Created a custom early stopping class to save the best checkpoint weights states.
 * Created custom model with nn class from Pytorch
 * Used transfer learning technique with the light model of mobile Net v2
 * Achieved best results with the custom model over the mobile net
@@ -51,15 +41,15 @@ The notebook starts by importing the necessary libraries and loading the dataset
 
 In this phase of testing, we trained and evaluated three different models: cnn_model, MobileNet, and ResNet. After training all three models on our dataset, we found that cnn_model performed the best, achieving an F1 score of 97.5%. However, MobileNet and ResNet also performed well, achieving F1 scores of 96.6% and 91.8%, respectively. 
 
-These results indicate that all three models are good candidates for further testing and deployment. However, the task wanted the model to be applied on mobile applications, which often means that the model has to be smaller then 40 MB.
+These results indicate that all three models are good candidates for further testing and deployment. However, the task wanted the model to be applied on mobile applications, which often means that the model has to be smaller than 40 MB.
 
-* Our custom CNN model got Estimated Total Size (MB): 51.09;
+* Our custom CNN model got an Estimated Total Size (MB): of 51.09;
 
-* Although ResNet18 is a popular and well performing model, it is not the best choice for mobile applications. ResNet18 got Estimated Total Size (MB): 81.11;
+* Although ResNet18 is a popular and well-performing model, it is not the best choice for mobile applications. ResNet18 got Estimated Total Size (MB): 81.11;
 
-* MobileNetV2 is our choice: it is a small and efficient model that is well suited for mobile applications. MobileNetV2 got Estimated Total Size (MB): 24.88.
+* MobileNetV2 is our choice: it is a small and efficient model that is well-suited for mobile applications. MobileNetV2 got Estimated Total Size (MB): 24.88.
 
-For future work, I intend to tweak on the custom model precision point using quantization techniques to reduze its size and try to fit in mobile applications.
+For future work, I intend to tweak on the custom model precision point using quantization techniques to reduce its size and try to fit in mobile applications.
 
 
 ![output](https://github.com/joaothomazlemos/page-flip-detector/assets/62029505/3159cadb-0185-4b0d-9443-5a0601199e6d)
