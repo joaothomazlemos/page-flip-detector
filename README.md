@@ -1,6 +1,9 @@
 
 # page-flip-detector
 
+![page fliping detector](https://github.com/joaothomazlemos/page-flip-detector/assets/62029505/60cdd9a2-300e-45b7-aad7-8128e85b1e2e)
+
+
 Application running on the Hugging Face repo so you can try yourself!
 
 [https://huggingface.co/spaces/John1-1/flipping-detector](https://huggingface.co/spaces/joaothomazlemos/flipping-detector)
